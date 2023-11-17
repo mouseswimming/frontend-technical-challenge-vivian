@@ -6,7 +6,7 @@ Create a simplified wizard that goes through some basic account registration ste
 
 The wizard steps should be structured/organized in a way to collect the necessary information but maintain a good user experience.
 
-<img width="569" alt="image" src="https://github.com/shanewazabbas/frontend-technical-interview-challenge/assets/86968952/29b86911-c182-4ec7-925e-e54524c84b91">
+<img width="569" alt="image" src="https://github.com/ksooley/frontend-technical-challenge/assets/102975243/b5d7e3b5-3401-48ed-9401-3cdb3981c2cd">
 
 
 
