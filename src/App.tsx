@@ -4,7 +4,7 @@ function App() {
   return (
     <>
       <div className="grid justify-items-center">
-        <h1 className="text-3xl font-bold underline text-red-400">
+        <h1 className="text-3xl font-bold text-brand-green">
           Account Registration Wizard
         </h1>
         <AccountRegister />

@@ -8,7 +8,12 @@ type ChannelOption = {
   imgIcon: string;
 };
 
-export default function ChannelSelect() {
+type ChannelProps = {
+  channel: string | undefined;
+  setChannel: (value: string) => void;
+};
+
+export default function ChannelSelect({ channel, setChannel }: ChannelProps) {
   const [posOptions, setPosOptions] = useState<ChannelOption[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -60,6 +65,8 @@ export default function ChannelSelect() {
             {option.data.label}
           </div>
         )}
+        value={channel}
+        onChange={(value) => setChannel(value)}
       />
     </>
   );

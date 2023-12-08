@@ -18,4 +18,13 @@ export const apiService = {
   async getChannel() {
     return fetchData("channel");
   },
+  async saveAccount(payload: any) {
+    try {
+      const response = await axios.post(`${BASE_URL}/account`, payload);
+      console.log(response);
+      return { status: "success" };
+    } catch (error) {
+      return { status: "error", error };
+    }
+  },
 };

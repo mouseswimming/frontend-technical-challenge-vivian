@@ -8,7 +8,12 @@ type PosOption = {
   imgIcon: string;
 };
 
-export default function PosSelect() {
+type PosSelectProps = {
+  pos: string | undefined;
+  setPos: (value: string) => void;
+};
+
+export default function PosSelect({ pos, setPos }: PosSelectProps) {
   const [posOptions, setPosOptions] = useState<PosOption[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -60,6 +65,8 @@ export default function PosSelect() {
             {option.data.label}
           </div>
         )}
+        value={pos}
+        onChange={(value) => setPos(value)}
       />
     </>
   );

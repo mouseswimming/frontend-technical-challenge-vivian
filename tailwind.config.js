@@ -2,7 +2,14 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "brand-green": "#038851",
+      },
+      backgroundImage: {
+        "logo-pattern": "url('assets/logo-pattern.png')",
+      },
+    },
   },
   plugins: [],
   corePlugins: {
