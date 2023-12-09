@@ -2,6 +2,7 @@ import { Button, Form, Input, InputNumber, Select } from "antd";
 import PosSelect from "./PosSelect";
 import ChannelSelect from "./ChannelSelect";
 import { useLocalStorage } from "../hooks/useStorage";
+import { useEffect } from "react";
 import { apiService } from "../service/apiService";
 
 const BUSINESS_TYPES = [
@@ -10,78 +11,45 @@ const BUSINESS_TYPES = [
   { value: "Enterprise", label: "Enterprise" },
 ];
 
-export default function AccountRegister() {
-  const [firstName, setFirstName, removeFirstName] = useLocalStorage<string>(
-    "firstName",
-    ""
-  );
-  const [lastName, setLastName, removeLastName] = useLocalStorage<string>(
-    "lastName",
-    ""
-  );
-  // const [lastName, setLastName] = useState<string>("testsdfdf");
+const ERROR_MESSAGE = "This field is required.";
+const validateMessages = {
+  required: ERROR_MESSAGE,
+};
 
-  const [businessName, setBusinessName, removeBusinessName] = useLocalStorage<
+export default function AccountRegister() {
+  const [formValue, setFormValue, removeFormValue] = useLocalStorage<
     string | undefined
-  >("businessName", "");
-  const [businessSize, setBusinessSize, removeBusinessSize] = useLocalStorage<
-    number | undefined
-  >("businessSize", undefined);
-  const [businessType, setBusinessType, removeBusinessType] = useLocalStorage<
-    string | undefined
-  >("businessType", undefined);
-  const [pos, setPos, removePos] = useLocalStorage<string | undefined>(
-    "pos",
-    undefined
-  );
-  const [channel, setChannel, removeChannel] = useLocalStorage<
-    string | undefined
-  >("channel", undefined);
+  >("accountForm", undefined);
 
   const [form] = Form.useForm();
 
-  const resetForm = () => {
-    removeFirstName();
-    removeLastName();
-    removeBusinessName();
-    removeBusinessSize();
-    removeBusinessType();
-    removePos();
-    removeChannel();
+  const updateStorage = (_changedValues: any, allValues: any) => {
+    setFormValue(JSON.stringify(allValues));
   };
 
-  // const checkCustomSelect = async (_: any, value: string | undefined) => {
-  //   if (!pos) {
-  //     return Promise.reject(new Error("Please select a Point of Sale."));
-  //   }
-  //   // Add additional custom validation logic here if needed
-  //   return Promise.resolve();
-  // };
+  const checkCustomSelect = async (_: any, value: string | undefined) => {
+    if (!value) {
+      return Promise.reject(new Error(ERROR_MESSAGE));
+    }
+    return Promise.resolve();
+  };
+
+  const resetForm = () => {
+    removeFormValue();
+  };
 
   const onFinish = async (values: any) => {
     console.log("Received values of form: ", values);
-    // console.log({
-    //   firstName,
-    //   lastName,
-    //   businessName,
-    //   businessSize,
-    //   businessType,
-    //   pos,
-    //   channel,
-    // });
+    const result = await apiService.saveAccount(values);
 
-    const result = await apiService.saveAccount({
-      firstName,
-      lastName,
-      businessName,
-      businessSize,
-      businessType,
-      pos,
-      channel,
-    });
-
-    console.log({ result });
+    if (result.status === "success") {
+      removeFormValue();
+    }
   };
+
+  useEffect(() => {
+    formValue ? form.setFieldsValue(JSON.parse(formValue)) : form.resetFields();
+  }, [formValue]);
 
   return (
     <div className="rounded-xl w-2/3 max-w-4xl bg-[#038851] p-4 bg-logo-pattern">
@@ -89,51 +57,38 @@ export default function AccountRegister() {
         form={form}
         layout="vertical"
         className="w-full px-8 py-12 bg-white rounded-lg shadow-lg grid gap-y-4"
-        // name="account registration"
+        name="account registration"
         scrollToFirstError
+        validateMessages={validateMessages}
+        onValuesChange={updateStorage}
         onFinish={onFinish}
       >
         <div className="grid grid-cols-1 gap-x-2 2xl:grid-cols-2">
           <Form.Item
             label="First Name"
-            // name="firstName"
+            name="firstName"
             className="font-medium"
             required
             rules={[
               {
                 required: true,
-                message: "First name is required.",
               },
             ]}
           >
-            <Input
-              placeholder="First name"
-              value={firstName}
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
-            />
+            <Input placeholder="First name" />
           </Form.Item>
           <Form.Item
             label="Last Name"
-            // name="lastName"
+            name="lastName"
             className="font-medium"
             required
             rules={[
               {
                 required: true,
-                message: "Last name is required.",
               },
             ]}
           >
-            {/* {lastName} */}
-            <Input
-              placeholder="Last name"
-              value={lastName}
-              onChange={(e) => {
-                setLastName(e.target.value);
-              }}
-            />
+            <Input placeholder="Last name" />
           </Form.Item>
         </div>
 
@@ -141,63 +96,42 @@ export default function AccountRegister() {
           <Form.Item
             label="Business Name"
             required
-            // name="businessName"
+            name="businessName"
             rules={[
               {
                 required: true,
-                message: "Business name is required.",
               },
             ]}
             className="font-medium"
           >
-            <Input
-              placeholder="Business Name"
-              value={businessName}
-              onChange={(e) => {
-                setBusinessName(e.target.value);
-              }}
-            />
+            <Input placeholder="Business Name" />
           </Form.Item>
           <div className="grid grid-cols-1 gap-x-2 2xl:grid-cols-2">
             <Form.Item
               label="Business Size"
               required
               className="font-medium"
-              // name="businessSize"
+              name="businessSize"
               rules={[
                 {
                   required: true,
-                  message: "Business size is required.",
                 },
               ]}
             >
-              <InputNumber
-                placeholder="Business Size"
-                className="w-full"
-                value={businessSize}
-                onChange={(value) => {
-                  setBusinessSize(value as number);
-                }}
-              />
+              <InputNumber placeholder="Business Size" className="w-full" />
             </Form.Item>
             <Form.Item
               label="Business Type"
               required
               className="font-medium"
-              // name="businessType"
+              name="businessType"
               rules={[
                 {
                   required: true,
-                  message: "Business type is required",
                 },
               ]}
             >
-              <Select
-                placeholder="choose from list"
-                value={businessType}
-                onChange={(value) => setBusinessType(value)}
-                options={BUSINESS_TYPES}
-              />
+              <Select placeholder="choose from list" options={BUSINESS_TYPES} />
             </Form.Item>
           </div>
         </div>
@@ -207,31 +141,27 @@ export default function AccountRegister() {
             label="Point of Sale used by business"
             className="font-medium"
             required
-            // name="pos"
-            // rules={[
-            //   {
-            //     // required: true,
-            //     // message: "Point of Sale is required.",
-            //     validator: checkCustomSelect,
-            //   },
-            // ]}
+            name="pos"
+            rules={[
+              {
+                validator: checkCustomSelect,
+              },
+            ]}
           >
-            <PosSelect pos={pos} setPos={setPos} />
+            <PosSelect />
           </Form.Item>
           <Form.Item
             label="Delivery Channel used by business"
             className="font-medium"
             required
-            // name="channel"
-            // rules={[
-            //   {
-            //     // required: true,
-            //     // message: "Delivery channel is required.",
-            //     validator: checkCustomSelect,
-            //   },
-            // ]}
+            name="channel"
+            rules={[
+              {
+                validator: checkCustomSelect,
+              },
+            ]}
           >
-            <ChannelSelect channel={channel} setChannel={setChannel} />
+            <ChannelSelect />
           </Form.Item>
         </div>
 
