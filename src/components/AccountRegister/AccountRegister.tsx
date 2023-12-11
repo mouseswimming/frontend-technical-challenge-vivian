@@ -64,7 +64,7 @@ export default function AccountRegister() {
   return (
     <>
       {contextHolder}
-      <div className="rounded-xl w-full max-w-4xl bg-[#038851] m-4 p-4 bg-logo-pattern">
+      <div className="rounded-xl w-full max-w-4xl bg-[#038851] m-4 p-4 bg-logo-pattern ">
         <Form
           form={form}
           layout="vertical"

@@ -1,8 +1,16 @@
 import axios from "axios";
 
+import { Account } from "../components/AccountRegister/type";
+
 const BASE_URL = "/api";
 
-const getGeneric = async (endpoint: string) => {
+export type ApiResponse<T> = {
+  status: "success" | "error";
+  data: T | null;
+  error: any;
+};
+
+const getGeneric = async <T>(endpoint: string): Promise<ApiResponse<T>> => {
   try {
     const response = await axios.get(`${BASE_URL}/${endpoint}`);
     return { status: "success", data: response.data, error: null };
@@ -11,7 +19,10 @@ const getGeneric = async (endpoint: string) => {
   }
 };
 
-const postGeneric = async (endpoint: string, payload: any) => {
+const postGeneric = async <T>(
+  endpoint: string,
+  payload: any
+): Promise<ApiResponse<T>> => {
   try {
     const response = await axios.post(`${BASE_URL}/${endpoint}`, payload);
     return { status: "success", data: response.data, error: null };
@@ -21,21 +32,13 @@ const postGeneric = async (endpoint: string, payload: any) => {
 };
 
 export const apiService = {
-  async getPOS() {
-    return getGeneric("pos");
+  async getPOS<T>(): Promise<ApiResponse<T[]>> {
+    return getGeneric<T[]>("pos");
   },
-  async getChannel() {
-    return getGeneric("channel");
+  async getChannel<T>(): Promise<ApiResponse<T[]>> {
+    return getGeneric<T[]>("channel");
   },
-  async saveAccount(payload: {
-    firstName: string;
-    lastName: string;
-    businessName: string;
-    businessSize: number;
-    businessType: string;
-    channel: number;
-    pos: number;
-  }) {
-    return postGeneric("account", payload);
+  async saveAccount(payload: Account): Promise<ApiResponse<Account>> {
+    return postGeneric<Account>("account", payload);
   },
 };

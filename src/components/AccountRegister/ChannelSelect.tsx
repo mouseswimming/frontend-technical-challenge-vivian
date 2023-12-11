@@ -1,12 +1,11 @@
-import { Select } from "antd";
 import { apiService } from "../../service/apiService";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { message } from "antd";
 
-type ChannelOption = {
-  value: number;
-  label: string;
-  imgIcon: string;
-};
+import SelectWithImage from "../SelectWithImage";
+import type { ChannelType } from "./type";
+import { MESSAGES } from "./const";
+import { useDataFetching } from "../../hooks/useDataFetching";
 
 type ChannelProps = {
   value?: string | undefined;
@@ -17,59 +16,37 @@ export default function ChannelSelect({
   value = undefined,
   onChange,
 }: ChannelProps) {
-  const [posOptions, setPosOptions] = useState<ChannelOption[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data, isLoading, error } = useDataFetching<ChannelType[]>({
+    apiMethod: apiService.getChannel,
+  });
+
+  const channelOptions = data
+    ? data.map((o) => ({
+        value: o.id,
+        label: o.name,
+        imgIcon: o.imageUrl,
+      }))
+    : [];
+
+  const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
-    fetchPosData();
-  }, []);
-
-  async function fetchPosData() {
-    setIsLoading(true);
-    const result = await apiService.getChannel();
-
-    if (result.status === "success") {
-      setPosOptions(
-        result.data.map(
-          (option: { id: number; name: string; imageUrl: string }) => ({
-            value: option.id,
-            label: option.name,
-            imgIcon: option.imageUrl,
-          })
-        )
-      );
-    } else {
-      console.error("Error:", result.error);
-      // Handle the error
+    if (error) {
+      messageApi.open({
+        type: "error",
+        content: MESSAGES.DELIVER_CHANNELS_LOADING_FAIL,
+      });
     }
-    setIsLoading(false);
-  }
+  }, [error]);
 
   return (
     <>
-      <Select
-        placeholder="choose from list"
-        loading={isLoading}
-        showSearch
-        optionFilterProp="children"
-        filterOption={(input, option) => {
-          return (option?.label.toLowerCase() ?? "").includes(
-            input.toLowerCase()
-          );
-        }}
-        options={posOptions}
-        optionRender={(option) => (
-          <div className="flex items-center gap-x-2 my-1">
-            <img
-              src={option.data.imgIcon}
-              alt={option.data.label}
-              className="h-10"
-            />
-            {option.data.label}
-          </div>
-        )}
+      {contextHolder}
+      <SelectWithImage
+        options={channelOptions}
         value={value}
-        onChange={(value) => onChange?.(value)}
+        onChange={onChange}
+        isLoading={isLoading}
       />
     </>
   );
