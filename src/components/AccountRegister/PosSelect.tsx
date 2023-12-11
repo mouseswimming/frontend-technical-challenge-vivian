@@ -1,5 +1,5 @@
 import { Select } from "antd";
-import { apiService } from "../service/apiService";
+import { apiService } from "../../service/apiService";
 import { useEffect, useState } from "react";
 
 type PosOption = {
@@ -68,7 +68,7 @@ export default function PosSelect({
             <img
               src={option.data.imgIcon}
               alt={option.data.label}
-              className="w-16"
+              className="h-10"
             />
             {option.data.label}
           </div>

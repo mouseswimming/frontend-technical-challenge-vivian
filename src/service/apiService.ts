@@ -27,7 +27,15 @@ export const apiService = {
   async getChannel() {
     return getGeneric("channel");
   },
-  async saveAccount(payload: any) {
+  async saveAccount(payload: {
+    firstName: string;
+    lastName: string;
+    businessName: string;
+    businessSize: number;
+    businessType: string;
+    channel: number;
+    pos: number;
+  }) {
     return postGeneric("account", payload);
   },
 };

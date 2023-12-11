@@ -1,5 +1,5 @@
 import { Select } from "antd";
-import { apiService } from "../service/apiService";
+import { apiService } from "../../service/apiService";
 import { useEffect, useState } from "react";
 
 type ChannelOption = {
@@ -8,10 +8,6 @@ type ChannelOption = {
   imgIcon: string;
 };
 
-// type ChannelProps = {
-//   channel: string | undefined;
-//   setChannel: (value: string) => void;
-// };
 type ChannelProps = {
   value?: string | undefined;
   onChange?: (value: string) => void;
@@ -67,7 +63,7 @@ export default function ChannelSelect({
             <img
               src={option.data.imgIcon}
               alt={option.data.label}
-              className="w-16"
+              className="h-10"
             />
             {option.data.label}
           </div>

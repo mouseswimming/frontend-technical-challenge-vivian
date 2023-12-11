@@ -1,12 +1,9 @@
-import AccountRegister from "./components/AccountRegister";
+import AccountRegister from "./components/AccountRegister/AccountRegister";
 
 function App() {
   return (
     <>
-      <div className="grid justify-items-center">
-        <h1 className="text-3xl font-bold text-brand-green">
-          Account Registration Wizard
-        </h1>
+      <div className="grid justify-items-center items-center h-full p-12">
         <AccountRegister />
       </div>
     </>
