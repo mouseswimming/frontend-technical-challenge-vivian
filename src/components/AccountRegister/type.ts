@@ -1,4 +1,4 @@
-export type ImageOption = {
+export type SelectImageOption = {
   value: number;
   label: string;
   imgIcon: string;

@@ -17,7 +17,7 @@ export default function PosSelect({
   onChange,
 }: PosSelectProps) {
   const { data, isLoading, error } = useDataFetching<PosType[]>({
-    apiMethod: apiService.getChannel,
+    apiMethod: apiService.getPOS,
   });
 
   const posOptions = data

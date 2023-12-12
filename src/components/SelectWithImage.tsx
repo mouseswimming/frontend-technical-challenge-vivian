@@ -1,8 +1,8 @@
 import { Select } from "antd";
-import type { ImageOption } from "./AccountRegister/type";
+import type { SelectImageOption } from "./AccountRegister/type";
 
 type SelectWithImageProps = {
-  options: ImageOption[];
+  options: SelectImageOption[];
   value?: string | undefined;
   onChange?: (value: string) => void;
   isLoading: boolean;

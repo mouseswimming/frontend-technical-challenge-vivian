@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import { Account } from "../components/AccountRegister/type";
 
 const BASE_URL = "/api";
