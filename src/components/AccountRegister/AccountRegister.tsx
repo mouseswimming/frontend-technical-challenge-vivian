@@ -133,7 +133,11 @@ export default function AccountRegister() {
                   },
                 ]}
               >
-                <InputNumber placeholder="Business Size" className="w-full" />
+                <InputNumber
+                  placeholder="Business Size"
+                  className="w-full"
+                  autoComplete="new-password"
+                />
               </Form.Item>
               <Form.Item
                 label="Business Type"
